@@ -13,4 +13,4 @@ SDL_Texture* loadTexture(const char* filename, SDL_Renderer* renderer);
 SDL_Texture* createTextTexture(TTF_Font* font, const char* text, SDL_Color color, SDL_Renderer* renderer);
 void renderTexture(SDL_Texture* texture, int x, int y, int width, int height, SDL_Renderer* renderer);
 Mix_Chunk* loadSound(const char* filename);
-#endif
+#endif 
