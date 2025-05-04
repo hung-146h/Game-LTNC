@@ -21,8 +21,8 @@ void renderMenu(SDL_Renderer* renderer, SDL_Texture* backgroundMenu, TTF_Font* f
 
     SDL_Color blackColor = {0, 0, 0, 255};
     SDL_Color yellowColor = {255, 215, 0, 255};
-    SDL_Color redColor = {255, 0, 0, 255};     // Màu đỏ cho "Fruit"
-    SDL_Color greenColor = {0, 255, 0, 255};   // Màu xanh lá cây đậm hơn cho "Box"
+    SDL_Color redColor = {255, 0, 0, 255};   
+    SDL_Color greenColor = {0, 255, 0, 255};  
 
 
     SDL_Texture* fruitText = createTextTexture(titleFont, "Fruit", redColor, renderer);
