@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 void initializeAppleGrid(vector<vector<SDL_Rect>>& applePositions, int SCREEN_WIDTH,
                         int SCREEN_HEIGHT, int GRID_ROWS, int GRID_COLS, int APPLE_SIZE, int MARGIN) {
     int gridWidth = SCREEN_WIDTH - 2 * MARGIN;
@@ -31,7 +30,6 @@ void initializeAppleGrid(vector<vector<SDL_Rect>>& applePositions, int SCREEN_WI
         }
     }
 }
-
 
 void resetGame(vector<vector<int>>& numbers, vector<vector<bool>>& visible, int GRID_ROWS, int GRID_COLS) {
     srand(time(0));
@@ -71,7 +69,6 @@ void resetGame(vector<vector<int>>& numbers, vector<vector<bool>>& visible, int 
     while (!resetGame()) {}
 }
 
-
 void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect, SDL_Rect& musicButtonRect,
                   SDL_Rect& highScoreButtonRect, SDL_Rect& exitButtonRect, SDL_Rect& yesButtonRect,
                   SDL_Rect& noButtonRect, SDL_Rect& playAgainButtonRect, SDL_Rect& exitGameButtonRect,
@@ -80,12 +77,28 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
                   SDL_Point& dragStart, SDL_Rect& dragRect, vector<vector<int>>& numbers,
                   vector<vector<bool>>& visible, vector<vector<bool>>& currentlyHighlighted,
                   const vector<vector<SDL_Rect>>& applePositions, int& score, int& highScore,
-                  Uint32& startTime, bool& gameOver, bool& hasWon, int GRID_ROWS, int GRID_COLS, int APPLE_SIZE) {
+                  Uint32& startTime, bool& gameOver, bool& hasWon, int GRID_ROWS, int GRID_COLS, int APPLE_SIZE,
+                  bool& quit) {
     if (e.type == SDL_QUIT) {
-        gameState = MENU;
+        quit = true;
         return;
     } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
-        gameState = MENU;
+        if (gameState == MENU) {
+            quit = true;
+        } else {
+            gameState = MENU;
+            Mix_HaltMusic();
+            musicPlaying = false;
+            gameOver = false;
+            hasWon = false;
+            for (int row = 0; row < GRID_ROWS; row++) {
+                for (int col = 0; col < GRID_COLS; col++) {
+                    visible[row][col] = true;
+                    currentlyHighlighted[row][col] = false;
+                }
+            }
+            resetGame(numbers, visible, GRID_ROWS, GRID_COLS);
+        }
         return;
     } else if (gameState == MENU && e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
         mouseX = e.button.x;
@@ -124,7 +137,7 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
                 if (pingSound != nullptr) {
                     Mix_PlayChannel(-1, pingSound, 0);
                 }
-                gameState = MENU;
+                quit = true; 
             }
         } else {
             if (SDL_PointInRect(&mousePoint, &yesButtonRect)) {
@@ -152,7 +165,7 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
             if (pingSound != nullptr) {
                 Mix_PlayChannel(-1, pingSound, 0);
             }
-            gameState = MENU;
+            gameState = MENU; 
             Mix_HaltMusic();
             musicPlaying = false;
             gameOver = false;
@@ -188,7 +201,7 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
                 }
                 SDL_Rect appleRect = applePositions[row][col];
                 SDL_Rect center = {appleRect.x + APPLE_SIZE / 2, appleRect.y + APPLE_SIZE / 2, 1, 1};
-                currentlyHighlighted[row][col] = SDL_HasIntersection(&dragRect, &center);
+                currentlyHighlighted[row][col] = SDL_HasIntersection(&dragRect, &center); // Sửa lỗi cú pháp: ¢er -> &center
             }
         }
     } else if (gameState == GAMEPLAY && e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT && isDragging && !gameOver) {
@@ -203,7 +216,7 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
                 if (!visible[row][col]) continue;
                 SDL_Rect appleRect = applePositions[row][col];
                 SDL_Rect center = {appleRect.x + APPLE_SIZE / 2, appleRect.y + APPLE_SIZE / 2, 1, 1};
-                if (SDL_HasIntersection(&dragRect, &center)) {
+                if (SDL_HasIntersection(&dragRect, &center)) { // Sửa lỗi cú pháp: ¢er -> &center
                     selectedApples.push_back({row, col});
                     sum += numbers[row][col];
                 }
@@ -250,7 +263,6 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
     }
 }
 
-
 void updateGameState(bool& gameOver, bool& hasWon, GameState& gameState,
                      const vector<vector<bool>>& visible, int GRID_ROWS, int GRID_COLS,
                      Uint32 currentTime, Uint32 startTime, const Uint32 GAME_TIME,
@@ -288,7 +300,6 @@ void updateGameState(bool& gameOver, bool& hasWon, GameState& gameState,
         }
     }
 }
-
 
 void runGame(SDL_Window* window, SDL_Renderer* renderer) {
     const int SCREEN_WIDTH = 1000;
@@ -399,10 +410,8 @@ void runGame(SDL_Window* window, SDL_Renderer* renderer) {
                          yesButtonRect, noButtonRect, playAgainButtonRect, exitGameButtonRect, mouseX, mouseY,
                          showMusicOptions, musicOn, musicPlaying, music, pingSound, gameOverSound, isDragging,
                          dragStart, dragRect, numbers, visible, currentlyHighlighted, applePositions, score,
-                         highScore, startTime, gameOver, hasWon, GRID_ROWS, GRID_COLS, 48);
-            if (e.type == SDL_QUIT || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)) {
-                quit = true;
-            }
+                         highScore, startTime, gameOver, hasWon, GRID_ROWS, GRID_COLS, 48, quit);
+            
         }
 
         if (gameState == MENU) {
@@ -432,4 +441,5 @@ void runGame(SDL_Window* window, SDL_Renderer* renderer) {
     SDL_DestroyTexture(apple);
     SDL_DestroyTexture(background);
     if (backgroundMenu != nullptr) SDL_DestroyTexture(backgroundMenu);
+    quitSDL(window, renderer); 
 }
