@@ -24,7 +24,8 @@ void handleEvents(SDL_Event& e, GameState& gameState, SDL_Rect& startButtonRect,
                   SDL_Point& dragStart, SDL_Rect& dragRect, std::vector<std::vector<int>>& numbers,
                   std::vector<std::vector<bool>>& visible, std::vector<std::vector<bool>>& currentlyHighlighted,
                   const std::vector<std::vector<SDL_Rect>>& applePositions, int& score, int& highScore,
-                  Uint32& startTime, bool& gameOver, bool& hasWon, int GRID_ROWS, int GRID_COLS, int APPLE_SIZE);
+                  Uint32& startTime, bool& gameOver, bool& hasWon, int GRID_ROWS, int GRID_COLS, int APPLE_SIZE,
+                  bool& quit);
 
 void updateGameState(bool& gameOver, bool& hasWon, GameState& gameState,
                      const std::vector<std::vector<bool>>& visible, int GRID_ROWS, int GRID_COLS,
