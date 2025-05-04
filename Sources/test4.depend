@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1746334702 source:e:\sdlgame\test4\render_utils.cpp
+	"render_utils.h"
+	"sdl_utils.h"
+	<sstream>
+
+1746334383 source:e:\sdlgame\test4\main.cpp
+	"sdl_utils.h"
+	"game_logic.h"
+
+1746334702 e:\sdlgame\test4\sdl_utils.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+
+1746334329 e:\sdlgame\test4\game_logic.h
+	<SDL.h>
+	<SDL_mixer.h>
+	<vector>
+
+1746334801 source:e:\sdlgame\test4\game_logic.cpp
+	"game_logic.h"
+	"sdl_utils.h"
+	"render_utils.h"
+	<cstdlib>
+	<ctime>
+	<vector>
+	<sstream>
+
+1746334702 e:\sdlgame\test4\render_utils.h
+	<SDL.h>
+	<SDL_ttf.h>
+	<vector>
+
+1746334532 source:e:\sdlgame\test4\sdl_utils.cpp
+	"sdl_utils.h"
+	<iostream>
+	<string>
+
