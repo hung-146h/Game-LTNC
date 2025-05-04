@@ -8,7 +8,7 @@ const char* WINDOW_TITLE = "Fruit Box";
 int main(int argc, char* argv[]) {
 
     SDL_Window* window = initSDL(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
-    SDL_Renderer* renderer = createRenderer(window, SCREEN_WIDTH, SCREEN_HEIGHT); // Truyền SCREEN_WIDTH và SCREEN_HEIGHT
+    SDL_Renderer* renderer = createRenderer(window, SCREEN_WIDTH, SCREEN_HEIGHT); 
 
     runGame(window, renderer);
 
